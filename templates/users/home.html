@@ -135,22 +135,13 @@
     <a href="{% url 'register' %}"  class="alert-link">Register</a> to continue
   </div>
   {% endif %}
-  <div>Recommended Movies</div>
-  <div class="row">
-    {% for movie in movies|slice:":4"  %}
-    <div class="col-md-3 col-sm-6">
-      <a href="{% url 'theater_list' movie.id %}" class="text-decoration-none">
-        <div class="card h-100">
-          <img src="{{image.movie.url}}" alt="image" class="card-image-top" height="300">
-          <div>
-            <h5>{{movie.name}}</h5>
-            <p>{{movie.description}}</p>
-          </div>
-        </div>
-      </a>
-    </div>    
+  <h3>Recommended for You</h3>
+  <ul>
+    {% for movie in recommendations %}
+      <li>{{ movie.title }} - {{ movie.genre }}</li>
     {% endfor %}
-  </div>
+  </ul>
+
   <div class="section-title">The Best of Live Events</div>
   <div class="row">
     <div class="col-md-2 col-sm-4">

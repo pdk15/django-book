@@ -1,6 +1,4 @@
-{% extends "users/basic.html" %}
-
-{% block content %}
+{% extends "users/basic.html" %} {% block content %}
 <div class="container mt-5">
   <div class="row">
     <div class="col-lg-8 mx-auto">
@@ -91,6 +89,63 @@
     </div>
   </div>
 </div>
+<form method="POST">
+  {% csrf_token %}
+  <div id="seat-grid">
+    {% for seat in seats %}
+    <div
+      class="seat {% if seat.booked %}booked{% else %}available{% endif %}"
+      data-seat-id="{{ seat.id }}"
+    >
+      {{ seat.number }}
+    </div>
+    {% endfor %}
+  </div>
+  <input type="hidden" name="seats" id="selected-seats" />
+  <button type="submit" class="btn btn-success mt-2">Book Now</button>
+</form>
+
+<style>
+  .seat {
+    width: 40px;
+    height: 40px;
+    border: 1px solid gray;
+    display: inline-block;
+    margin: 4px;
+    text-align: center;
+    line-height: 40px;
+    cursor: pointer;
+  }
+  .booked {
+    background-color: #ccc;
+    pointer-events: none;
+  }
+  .available {
+    background-color: #eee;
+  }
+  .selected {
+    background-color: #4caf50;
+    color: white;
+  }
+</style>
+
+<script>
+  const selectedSeats = new Set();
+  document.querySelectorAll(".available").forEach((seat) => {
+    seat.addEventListener("click", () => {
+      const id = seat.dataset.seatId;
+      seat.classList.toggle("selected");
+      if (selectedSeats.has(id)) {
+        selectedSeats.delete(id);
+      } else {
+        selectedSeats.add(id);
+      }
+      document.getElementById("selected-seats").value =
+        Array.from(selectedSeats).join(",");
+    });
+  });
+</script>
+
 <style>
   body {
     font-family: Arial, sans-serif;
@@ -147,26 +202,25 @@
     margin: 0 10px;
   }
 </style>
-{% comment %} <h1>Seats for {{theater.name}} - {{theater.movie.name}} </h1>
-{% if error  %}
-<p style="color : red ;">{{error}}</p>
+{% comment %}
+<h1>Seats for {{theater.name}} - {{theater.movie.name}}</h1>
+{% if error %}
+<p style="color: red">{{error}}</p>
 {% endif %}
 <form method="POST">
-    {% csrf_token %}
-    <ul>
+  {% csrf_token %}
+  <ul>
     {% for seat in seats%}
     <li>
-        Seats{{seat.seat_number}}
-        {% if seat.isbooked %}
-        <strong>Booked</strong>
-        {% else  %}
-        <input type="checkbox" name="seats" value="{{seat_id}}">
-        <strong>Available seat {{seat.seat_number}}</strong>
-        {% endif %}
+      Seats{{seat.seat_number}} {% if seat.isbooked %}
+      <strong>Booked</strong>
+      {% else %}
+      <input type="checkbox" name="seats" value="{{seat_id}}" />
+      <strong>Available seat {{seat.seat_number}}</strong>
+      {% endif %}
     </li>
     {% endfor %}
-</ul>
-<button type="submit">Book selected seats</button>
-</form> {% endcomment %}
-
-{% endblock %}
+  </ul>
+  <button type="submit">Book selected seats</button>
+</form>
+{% endcomment %} {% endblock %}

@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".", // This means paths are relative to this jsconfig.json file
+    "module": "es6", // Or "commonjs" depending on your module system
+    "target": "es6" // Or "es2017", "es2019", etc., depending on your target browser support
+    // If you are using JSX (e.g., with React), uncomment the line below:
+    // "jsx": "react"
+  },
+  "include": [
+    "**/*.js" // Include all .js files in this directory and subdirectories
+  ],
+  "exclude": [
+    "node_modules" // Exclude node_modules if you're using npm/yarn
+  ]
+}

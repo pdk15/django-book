@@ -4,10 +4,17 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login,authenticate
 from django.contrib.auth.decorators import login_required  
 from movies.models import Movie , Booking
+from datetime import date
+from movies.models import Movie , Show
 
+# def home(request):
+    # movies = Movie.objects.all()
+    # return render(request, 'home.html', {'movies': movies})
 def home(request):
+    today = date.today()
     movies = Movie.objects.all()
-    return render(request, 'home.html', {'movies': movies})
+    today_show = Show.objects.filter(date=today)
+    return render(request, 'users/home.html', {'today_show': today_show})
 
 def register(request):
     if request.method == 'POST':
@@ -64,3 +71,17 @@ def reset_password(request):
         else :
             form=PasswordChangeForm(user=request.user)
         return render(request,'users/reset_password.html',{'form' :form})
+
+from django.db.models import Count
+
+def recommend_movies(user):
+    # Get top genre the user books
+    booked_movies = Booking.objects.filter(user=user).values_list('movie__genre', flat=True)
+    top_genres = booked_movies.annotate(count=Count('movie__genre')).order_by('-count')
+    if top_genres:
+        return Movie.objects.filter(genre=top_genres[0])
+    return Movie.objects.all()[:5]  # fallback
+
+def dashboard(request):
+    recommendations = recommend_movies(request.user)
+    return render(request, 'dashboard.html', {'recommendations': recommendations})

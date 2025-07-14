@@ -25,6 +25,21 @@
         </div>
     </div>
     
+
+    <h2>Today's Shows</h2>
+    <div class="row">
+        {% for show in today_shows %}
+            <div class="col-4 card border-primary mb-3">
+                <h5 class="card-header">{{ show.movie.title }}</h5>
+                <div class="card-body">
+                    <p>Time: {{ show.time }}</p>
+                    <p>Theater: {{ show.theater.name }}</p>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+    
     <div class="row" id="movieList">
         {% for movie in movies %}
         <div class="col-md-4 mb-4">

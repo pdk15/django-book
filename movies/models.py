@@ -19,6 +19,15 @@ class Theater(models.Model):
     
     def __str__(self):
         return f'{self.name} - {self.movie.name} at {self.time}'
+    
+class Show(models.Model):
+    movie = models.ForeignKey(Movie, on_delete=models.CASCADE)
+    theater = models.ForeignKey(Theater, on_delete=models.CASCADE)
+    date = models.DateField()
+    time = models.TimeField()
+
+    def __str__(self):
+        return f"{self.movie.name} at {self.theater.name} on {self.date} {self.time}"
 
 class Seat(models.Model):
     theater = models.ForeignKey(Theater,on_delete=models.CASCADE,related_name='seats')
