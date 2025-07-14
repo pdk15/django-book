@@ -1,2 +1,5 @@
-Django
-vercel-python-wsgi
+Django>=5.2.4
+gunicorn
+dj-database-url
+whitenoise
+psycopg2-binary
